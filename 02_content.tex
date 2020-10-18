@@ -1,0 +1,716 @@
+% =========================================================================== %
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Recap}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Kommandozeile
+	\begin{itemize}
+	\item Text-Befehle mit Parametern
+	\item Arbeitsverzeichnis
+	\item Python-Interpreter aufrufen
+	\end{itemize}
+\item Befehl \inPy{print}
+	\begin{itemize}
+	\item Text-Ausgabe
+	\item Argumente in Klammern, durch Kommata getrennt
+	\item Texte in Anführungszeichen
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item Variablen
+	\begin{itemize}
+	\item Speicherstellen mit veränderlichem Inhalt
+	\item Bezeichner und Datentyp
+	\item Rechnen und Updaten
+	\item Verwendung mit \inPy{print}
+	\end{itemize}
+\end{itemize}
+\end{columns}
+%
+\begin{center}
+	\emph{Noch Fragen?}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kommentare}
+%
+\begin{minipage}[t]{.44\linewidth}
+\begin{itemize}
+\item Text-Teile, die vom Interpreter ignoriert werden
+\item Erinnerungen und Erklärungen für uns als ProgrammiererInnen
+\item Zeilen zum Testen schnell ein- und ausschalten
+\item Beginnen mit Raute (\texttt{\#})
+\item Gehen bis zum Ende der Zeile
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[t]{.55\linewidth}
+\phantom{x}
+\begin{codebox}[Code mit Kommentaren]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+print("Hello World")  # Textausgabe
+
+# Auch als eigene Zeile
+
+# Verschachtelte # Kommentare existieren nicht
+
+# print("Code, der nicht ausgeführt wird")
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Datentypen umwandeln}
+%
+\begin{itemize}
+\item Variablen speichern Werte
+\item Rechnen mit Werten im allgemeinen möglich.
+\item Datentypen beeinflussen das Ergebnis (\inPy{"1" + "2"} vs. \inPy{1 + 2})
+\item Inkompatible Datentypen (\inPy{"1" + 2} ergibt Fehlermeldung)
+\item Datentypen als Funktion: \inPy{float(1)} \thus~ \inPy{1.0}
+\end{itemize}
+%
+\begin{minipage}[t]{.52\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Typen-Umwandlung]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+text = "Das Ergebnis lautet: "
+result = ((1 + 1j) * (7.5 / 19 + 1)) ** 2
+
+text += str(result)
+
+print(text)
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.47\linewidth}
+\phantom{x}
+\begin{cmdbox}[Ausgabe: Typen-Umwandlung]
+\begin{minted}[fontsize=\scriptsize]{text}
+Das Ergebnis lautet: 3.890581717451524j
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Datentypen umwandeln}
+%
+\begin{itemize}
+\item Datenverlust möglich
+	\begin{itemize}
+	\item \inPy{int(1.2)} \thus~ \inPy{1}
+	\end{itemize}
+\item Nicht immer möglich
+	\begin{itemize}
+	\item \inPy{int("1")} -- okay, Ergebnis \inPy{1}
+	\item \inPy{float("1.0")} -- okay, Ergebnis \inPy{1.0}
+	\item  \inPy{int("1.0")} -- Fehlermeldung
+	\end{itemize}
+\end{itemize}
+%
+\begin{cmdbox}[Fehlermeldung -- \texttt{int("1.0")}]
+\begin{minted}[fontsize=\scriptsize]{text}
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+ValueError: invalid literal for int() with base 10: '1.0'
+\end{minted}
+\end{cmdbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Formatierte Texte}
+%
+\begin{itemize}
+\item Tabellarische Ausgaben
+\item Zahl der Nachkommastellen nicht fix
+\item Lösung: Spezielle Strings, die Format vorgeben
+\item Präfix \inPy{f}, dann normaler String in Anführungszeichen(\inPy{"} oder \inPy{'})
+\item Platzhalter für Variablenwerte in \{geschweiften Klammern\}
+\item Optional: Doppelpunkt und Formatierungszeichen
+\end{itemize}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Formatierter Text (1)]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+x = 7 / 3
+text = f"x = {x}"
+
+print(text)
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{cmdbox}[Ausgabe: Formatierter Text (1)]
+\begin{minted}[fontsize=\scriptsize]{text}
+x = 2.3333333333333335
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Formatierte Texte: Spaltenbreite}
+%
+\begin{itemize}
+\item Formatierungszeichen: Im einfachsten Fall eine Zahl
+\item Zahl der Schriftzeichen, die für diesen Ausdruck vorgesehen sind
+\item Füllt mit Leerzeichen auf, druckt vollen Text
+\item \emph{Keine} Leerzeichen
+\end{itemize}
+%
+\vspace{-10pt}
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Formatierter Text (2)]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+name1 = "Dusky"
+score1 = 9001
+name2 = "Joe"
+score2 = 666
+
+print("Highscore")
+print(f"{'Python':20}: {123456:5}")
+print(f"{name1:20}: {score1:5}")
+print(f"{name2:20}: {score2:5}")
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{cmdbox}[Ausgabe: Formatierter Text (2)]
+\begin{minted}[fontsize=\scriptsize]{text}
+Highscore
+Python              : 123456
+Dusky               :  9001
+Joe                 :   666
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Formatierte Texte: Bündigkeit und Beschneiden}
+%
+\begin{itemize}
+\item \texttt{<}, \texttt{>}, \inPy{^}: Links- und Rechtsbüdnig, Zentriert
+\item \texttt{.Zahl}: Auf [Zahl] Schriftzeichen begrenzen
+\item Leerzeichen und Plus: Platz für Vorzeichen
+\item \texttt{0}: Führende Nullen anzeigen
+\item \emph{Keine} Leerzeichen
+\end{itemize}
+%
+\vspace{-10pt}
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Formatierter Text (3)]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+text = "sample"
+value = 123
+print( f"|{text:15}| |{value:15}|" )
+print(f"|{text:<15}| |{value:<15}|")
+print(f"|{text:>15}| |{value:>15}|")
+print(f"|{text:^15}| |{value:^15}|")
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{cmdbox}[Ausgabe: Formatierter Text (3)]
+\begin{minted}[fontsize=\scriptsize]{text}
+|sample         | |            123|
+|sample         | |123            |
+|         sample| |            123|
+|    sample     | |      123      |
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Formatierte Texte: Fließkommawerte}
+%
+\begin{itemize}
+\item Formatierungszeichen \texttt{f}
+\item \texttt{.Zahl}: Auf [Zahl] Schriftzeichen begrenzen
+\item \texttt{Gesamtlaenge.Nachkommaanteil} -- Dezimalpunkt wird mitgezählt
+\item Kombinierbar mit bekannten Zeichen
+\end{itemize}
+%
+\vspace{-10pt}
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Formatierter Text (4)]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+num = 1.2
+print(f"|{num}|")
+print(f"|{num:f}|")
+print(f"|{num:6.2f}|")
+print(f"|{num:<6.1f}|")
+print(f"|{num:06.2f}|")
+print(f"|{num:+06.2f}|")
+print(f"|{num: 06.2f}|")
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\scriptsize\phantom{x}
+\begin{cmdbox}[Ausgabe: Formatierter Text (4)]
+%\begin{minted}[fontsize=\scriptsize]{text}
+\phantom{x}\\
+|1.2|\\
+|1.200000|\\
+|~~1.20|\\
+|1.2~~~|\\
+|001.20|\\
+|+01.20|\\
+| 01.20|
+%\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Die Große Frage}
+%
+\begin{center}
+\begin{Large}
+\emph{Muss ich das alles auswendig wissen?}
+\end{Large}
+\end{center}
+%
+\begin{itemize}
+\item Nein.
+\item Script, Folien, Internet, ... jederzeit zu eurer Verfügung
+\item Wissen, dass es das gibt, und wo man nachsehen kann
+\item Flüssig Lesen können
+\item Mit Hilfsmitteln umsetzen können
+\item Mit Praxis kommt das irgendwann von alleine
+\item Nach 20 Jahren muss ich immer noch Details nachschlagen
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Kapitel 2}
+%
+\begin{itemize}
+\item  Usereingaben und Entscheidungen
+	\begin{itemize}
+	\item Usereingaben -- \inPy{input}
+	\item Booleans (Wahrheitswerte), Vergleichsoperatoren und logische Operatoren
+	\item \inPy{if}-Blöcke
+	\item Der Ternäre Operator
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Usereingaben}
+%
+\begin{itemize}
+\item Daten Lesen von der Tastatur mit \inPy{input}.
+\item Parameter \enquote{Prompt}: Text, der als \enquote{Frage} gestellt wird
+\item Rückgabe der Eingabe als String
+\item Gegebenenfalls Typenumwandlung nötig.
+\item User kann (und wird) Unsinn eingeben!
+\end{itemize}
+%
+\vspace{-10pt}
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Dateneingabe]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+inText = input(
+    "Bitte geben Sie eine Zahl ein: ")
+inNumber = float(inText)
+print("Das Quadrat dieser Zahl ist",
+      inNumber ** 2)
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{cmdbox}[Ausgabe: Dateneingabe]
+\begin{minted}[fontsize=\scriptsize]{text}
+Bitte geben Sie eine Zahl ein: 1.5
+Das Quadrat dieser Zahl ist 2.25
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Wahrheitswerte}
+%
+\begin{itemize}
+\item Datentyp \inPy{bool}: Gedanke Ja (\inPy{True}) oder Nein (\inPy{False})
+\item Ergebnis von Vergleichen: \inPy{1 + 5 * 8 + 1 == 42} ist \inPy{True}
+\item Kann in Variablen gespeichert werden: \inPy{truth = (1 + 5 * 8 + 1 == 42)}
+\item Intern: Zahlen \inPy{1} und \inPy{0} mit spezieller Interpretation.\\
+	\inPy{True + True == 2}
+\end{itemize}
+%
+\newcolumntype{C}{>{         \centering\arraybackslash} p{.245\linewidth}}
+\newcolumntype{O}{>{\ttfamily\centering\arraybackslash} p{.200\linewidth}}
+
+\rowcolors{1}{tabhighlight}{white}
+\begin{center}
+\begin{tabularx}
+	{\linewidth}
+	{CO|CO}
+\toprule[1pt]
+	
+	\textbf{Vergleich}  & \normalfont \textbf{Zeichen}  &  
+	\textbf{Vergleich}  & \normalfont \textbf{Zeichen}
+\tabcrlf
+
+	Gleichheit          & ==                   &  Ungleichheit         & != \textrm{oder} <>\\
+	Kleiner als         & <                    &  Größer als           & >  \\
+	Kleiner oder gleich & <=                   &  Größer oder gleich   & >= \\
+	
+\bottomrule[1pt]
+\end{tabularx}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{minipage}[t]{.49\linewidth}
+\begin{Large}
+Logische Verknüpfungen
+\vspace{6pt}
+\end{Large}
+\begin{itemize}
+\item \enquote{Verkettung} von Wahrheitswerten
+\item \inPy{and}: Beide Aussagen erfüllt
+\item \inPy{or}: Mindestens Eine Aussage erfüllt
+\item Direkt an \inPy{bool}s (Beispiel rechts)...
+\item ... oder in Zusammen gesetzten Ausdrücken\\
+	\inPy{good = (T > 20) and (T < 25)}
+\item In anderen Sprachen: XOR (exclusive or). Python: Ungleichheit an \inPy{bool}s (\texttt{!=})
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Code: Verkettung mit \texttt{and}]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+temperature = float(input(
+    "Aktuelle Temperatur? "
+))
+warmEnough = temperature > 20
+coldEnough = temperature < 25
+pleasantTemperature = warmEnough and \
+                      coldEnough
+print("'Es ist angenehm warm' ist",
+      pleasantTemperature)
+\end{minted}
+\end{codebox}
+\begin{cmdbox}[Ausgabe: Dateneingabe]
+\begin{minted}[fontsize=\scriptsize]{text}
+Aktuelle Temperatur? 18
+'Es ist angenehm warm' ist False
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Bedingte Ausführung: \inPy{if}-Blöcke}
+%
+\begin{minipage}[t]{.49\linewidth}
+\begin{itemize}
+\item Wenn-Dann-Struktur: Führe Code-Abschnitt nur unter Bedingung aus
+\item Bedingung: Wahrheitswert
+\item Anweisungen: Code, wie bereits bekannt und wie noch gezeigt. Auch weitere \inPy{if}-Blöcke
+\item Einrückungen geben vor, was an Bedingung gebunden
+\item Nach dem \inPy{if}-Block: Wieder ohne Einrückung weiter
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Syntax: \texttt{if} (1)]
+\begin{minted}[fontsize=\scriptsize]{python}
+if Wahrheitswert :
+    Anweisungen
+    ...
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Syntax: \texttt{if} (2)]
+\begin{minted}[fontsize=\scriptsize]{python}
+if Wahrheitswert :
+    Anweisungen
+    ...
+else :
+    Anweisungen
+    ...
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Einrückungen}
+%
+\begin{itemize}
+\item Leerzeichen oder Tabulatoren
+\item Nicht gemischt
+\item Gleiche Einrückungs-Tiefe über den gesamten Code
+\end{itemize}
+%
+\begin{hintbox}
+Empfehlung der Python-Entwickler: Vier Leerzeichen\\
+Viele Editoren automatisieren dies mit Tabulator-Taste
+\end{hintbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
+
+if (temperature > 20) and (temperature < 25) :
+    print("Es ist angenehm warm.")
+else :
+    print("Es ist entweder zu heiß oder zu kalt.")
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabebeispiel 1]
+\begin{minted}[fontsize=\scriptsize]{text}
+Aktuelle Temperatur? 23
+Es ist angenehm warm.
+\end{minted}
+\end{cmdbox}
+%
+\begin{cmdbox}[Ausgabebeispiel 2]
+\begin{minted}[fontsize=\scriptsize]{text}
+Aktuelle Temperatur? 18
+Es ist entweder zu heiß oder zu kalt.
+\end{minted}
+\end{cmdbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{if} mit mehreren Bedingungen}
+%
+\begin{minipage}[t]{.49\linewidth}
+\begin{itemize}
+\item Prüft zuerst oberste Bedingung
+\item Wenn nicht erfüllt: erstes \inPy{elif}; dann zweites, ...
+\item Wenn mehrere Bedingungen erfüllt: nur erster Code ausgeführt
+\item Beliebig viele \inPy{elif}-Elemente
+\item \inPy{else} weiterhin optional
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[t]{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Syntax: \texttt{if} (3)]
+\begin{minted}[fontsize=\scriptsize]{python}
+if Wahrheitswert :
+    Anweisungen
+    ...
+elif Wahrheitswert :
+   Anweisungen
+   ...
+else :
+    Anweisungen
+    ...
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: \texttt{elif}]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+temperature = float(input("Bitte geben Sie die aktuelle Temperatur ein: "))
+if temperature < 20 :
+    print("Es ist zu kalt.")
+elif temperature > 25 :
+    print("Es ist zu heiß")
+else :
+    print("Es ist angenehm warm.")
+\end{minted}
+\end{codebox}
+%
+\begin{warnbox}[Fehlerhafter Code: \texttt{elif}, leftupper=6mm]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+i = 23
+
+if i < 25 :
+    print("Diese Zahl ist kleiner als 25.")
+elif i > 20 :
+    print("Diese Zahl ist größer als 20.")
+\end{minted}
+\end{warnbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Verschachtelter \texttt{if}-Block]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+i = int(input("Bitte geben Sie eine Ganzahl ein: "))
+
+if i % 2 == 0 :
+    if   i > 100 :
+        print(i, "ist eine große gerade Zahl.")
+    elif i >   0 :
+        print(i, "ist eine kleine gerade Zahl.")
+    else :
+        print(i, "ist eine negative gerade Zahl.")
+else :
+    print(i "ist ungerade.")
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{warnbox}[Redundanz bei \texttt{if} mit logischen Operatoren: \texttt{elif}, leftupper=6mm]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+i = int(input("Bitte geben Sie eine Ganzahl ein: "))
+
+if   i % 2 == 0 and i > 100 :
+    print(i, "ist eine große gerade Zahl.")
+elif i % 2 == 0 and i <   0 :
+    print(i, "ist eine große gerade Zahl.")
+elif i % 2 == 0 :
+    print(i, "ist eine negative gerade Zahl.")
+else :
+    print(i "ist ungerade.")
+\end{minted}
+\end{warnbox}
+%
+\begin{itemize}
+\item Dreifache Prüfung: \texttt{i \% 2}
+\item Tippfehler und vergessene Zeilen bei Nachbearbeitung
+\item Weniger klar Lesbar: \inPy{else}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+	\begin{warnbox}[Gültigkeitsprüfung: Reihe von \texttt{if}s, leftupper=7mm]
+	\begin{minted}[linenos, fontsize=\scriptsize]{python}
+playerCount = int(input(
+    "Bitte Spielerzahl eingeben: "
+))
+      
+if playerCount < 2 :
+    print("Ungeeignet für", 
+          playerCount, 
+          "Spieler."
+    )
+if playerCount > 5) :
+    print("Ungeeignet für", 
+          playerCount,
+          "Spieler."
+    )
+	\end{minted}
+	\end{warnbox}
+%
+	\begin{codebox}[Gültigkeitsprüfung: logisches Oder]
+	\begin{minted}[linenos, fontsize=\scriptsize]{python}
+playerCount = int(input(
+    "Bitte Spielerzahl eingeben: "
+))
+      
+if  playerCount < 2 or
+    playerCount > 5  :
+        print("Ungeeignet für",
+              playerCount,
+              "Spieler."
+        )
+	\end{minted}
+	\end{codebox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}
+%
+\begin{hintbox}[Fazit]
+Strukturen durchdenken. Redundanz vermeiden. Gegebenenfalls neu aufsetzen.\\
+
+Für größere Projekte schreibe ich fast jede Zeile doppelt: einmal als Konzept, und einmal, um den Code auch über lange Zeit nutzbar zu halten.
+\end{hintbox}
+%
+\end{frame}
