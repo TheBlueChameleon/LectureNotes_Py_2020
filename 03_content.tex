@@ -11,11 +11,6 @@
 \begin{columns}[T]
 \column{.5\linewidth}
 \begin{itemize}
-\item Kommentare
-	\begin{itemize}
-	\item Raute-Symbol (\texttt{\#}) leitet ein 
-	\item Ignoriert alles bis Zeilenende
-	\end{itemize}
 \item Datentypen Umwandeln
 	\begin{itemize}
 	\item Datentyp-Bezeichner als Funktion, \zB \inPy{int("3")}
@@ -162,8 +157,9 @@ print( cmath.sin(cmath.pi / 2) )
 	\begin{itemize}
 	\item Speichermodell
 	\item Mutable vs. Immutable
-	\item \inPy{list}s, \inPy{tuple}s, \inPy{str}ings, \inPy{ranges} und \inPy{dict}ionaries
-	\item Spezielle Funktionen
+	\item \inPy{list}s
+	\item Slices
+	\item Methoden und spezielle Funktionen
 	\end{itemize}
 \end{itemize}
 %
@@ -659,9 +655,152 @@ A is C: True
 \end{itemize}
 %
 \column{.5\linewidth}
-
+\begin{codebox}[Syntax: Methodenaufruf]
+\begin{minted}[fontsize=\scriptsize]{python}
+ListenVariable.Methodenname(Parameter)
+\end{minted}
+\end{codebox}
 \end{columns}
 %
 \end{frame}
 
 % =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{minipage}{.49\linewidth}
+\begin{Large}
+Methoden
+\vspace{6pt}
+\end{Large}
+\begin{itemize}
+\item \inPy{append} -- \emph{Element} anhängen
+	\begin{itemize}
+	\item Ähnlich wie \inPy{+=}, jedoch mit \emph{Elementen}, nicht mit Listen
+	\item Kann auch Unterlisten erzeugen
+	\end{itemize}
+\item \inPy{insert} -- Element in Mitte der Liste einfügen
+	\begin{itemize}
+	\item Erster Parameter: Index, an den eingefügt werden soll
+	\item Elemente rücken nach
+	\end{itemize}
+\item \inPy{remove} -- Element löschen (wenn vorhanden)
+	\begin{itemize}
+	\item Parameter: zu löschendes Element (nicht Index!)
+	\item Wenn nicht in Liste: Fehlermeldung
+	\item Wenn mehrfach in Liste: löscht erstes Element
+	\end{itemize}
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}{.49\linewidth}
+\phantom{x}
+\begin{codebox}[Beispiel: \texttt{is} vs. \texttt{==}]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+L = [1, 2, 3]
+
+L.append(4)
+L.append([5])
+
+print(L)
+
+L.insert(1, 99)
+print(L)
+
+L.remove(99)
+#L.remove(99)  # Nicht mehr in Liste!
+print(L)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe]
+\begin{minted}[fontsize=\scriptsize]{text}
+[1, 2, 3, 4, [5]]
+[1, 99, 2, 3, 4, [5]]
+\end{minted}
+\end{cmdbox}
+\end{minipage}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Einschub: Einträge Löschen}
+%
+\begin{hintbox}[Löschen mit Index]
+Benutzen Sie die Slicing-Technik, wenn Sie eine bestimmte Listen\emph{position} entfernen wollen. Konstruieren Sie dazu eine Hilfsliste mit allem Elementen \emph{vor} dem zu löschenden Eintrag, und eine weitere Liste mit allen Einträgen \emph{nach} dem zu löschenden Eintrag. Diese beiden Hilfslisten können Sie mit dem Additionsoperator wieder zusammensetzen.
+\end{hintbox}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Drittes Element Entfernen]
+\begin{minted}[fontsize=\scriptsize]{python}
+X = ["Ich", "will", "nicht", "mehr"]
+toDelete = 2
+X = L[:toDelete] + L[toDelete + 1:]
+print(X)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe]
+\begin{minted}[fontsize=\scriptsize]{text}
+['Ich', 'will', 'mehr']
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{Large}
+Methoden... Fortsetzung
+\vspace{6pt}
+\end{Large}
+\begin{itemize}
+\item \inPy{sort} -- Liste aufsteigend sortieren (sofern möglich)
+\item \inPy{reverse} -- Listenreihenfolge umdrehen
+\item \inPy{pop} -- letztes Element löschen und zurückgeben
+\end{itemize}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: \texttt{is} vs. \texttt{==}]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+langs = ["C", "Python", "C++", "Java",
+        "BASIC", "Assembly", "LaTeX",
+        "bash", "gnuPlot", "makefile"]
+
+langs.sort()
+print(langs)
+
+langs.reverse()
+print(langs)
+
+print(langs.pop())
+print(langs)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe]
+\begin{minted}[fontsize=\scriptsize]{text}
+['Assembly', 'BASIC', 'C', 'C++', 'Java',
+ 'LaTeX', 'Python', 'bash', 'gnuPlot',
+ 'makefile']
+['makefile', 'gnuPlot', 'bash', 'Python',
+ 'LaTeX', 'Java', 'C++', 'C', 'BASIC',
+ 'Assembly']
+Assembly
+['makefile', 'gnuPlot', 'bash', 'Python',
+ 'LaTeX', 'Java', 'C++', 'C', 'BASIC']
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}

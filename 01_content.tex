@@ -488,3 +488,34 @@ und noch mehr Text
 \end{itemize}
 %
 \end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kommentare}
+%
+\begin{minipage}[t]{.44\linewidth}
+\begin{itemize}
+\item Text-Teile, die vom Interpreter ignoriert werden
+\item Erinnerungen und Erklärungen für uns als ProgrammiererInnen
+\item Zeilen zum Testen schnell ein- und ausschalten
+\item Beginnen mit Raute (\texttt{\#})
+\item Gehen bis zum Ende der Zeile
+\end{itemize}
+\end{minipage}
+%
+\begin{minipage}[t]{.55\linewidth}
+\phantom{x}
+\begin{codebox}[Code mit Kommentaren]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+print("Hello World")  # Textausgabe
+
+# Auch als eigene Zeile
+
+# Verschachtelte # Kommentare existieren nicht
+
+# print("Code, der nicht ausgeführt wird")
+\end{minted}
+\end{codebox}
+\end{minipage}
+%
+\end{frame}

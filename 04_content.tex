@@ -1,0 +1,314 @@
+% =========================================================================== %
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Recap}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Module
+	\begin{itemize}
+	\item Laden mit \inPy{import Modulname}
+	\item Objekte ansprechen mit \inPy{Modulname.Symbol}
+	\end{itemize}
+\item lists
+	\begin{itemize}
+	\item Datencontainer
+	\item Elemente in [eckigen Klammern, Kommagetrennt]
+	\item Zugriff mit [Index in eckigen Klammern]
+	\item negative Indices: von hinten herein zählen
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item Slices
+	\begin{itemize}
+	\item Index-Variante
+	\item Erzeugt neue Liste
+	\item \phantom{x} [Start : Stop : Schrittweite]
+	\item Elemente können ausgelassen werden
+	\end{itemize}
+\item Referenzen und Kopieren
+	\begin{itemize}
+	\item Werzuweisung mit \texttt{=} über Referenzen
+	\item Modul Copy
+	\item \inPy{copy.deepcopy} für Unterlisten
+	\end{itemize}
+\item mutable / immutable
+\end{itemize}
+
+\end{columns}
+%
+\begin{center}
+	\emph{Noch Fragen?}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kapitel 4}
+%
+\begin{itemize}
+\item \inPy{str}ings
+\item \inPy{tuple}s
+\item \inPy{set}s und \inPy{frozenset}s
+\item \inPy{ranges}
+\item \inPy{dict}ionaries
+\item Spezielle Funktionen und Operatoren für Container
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Strings}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Bereits bekannt -- Texte in \texttt{''}doppelten Anführungszeichen\texttt{''}
+\item Eigentlich: \emph{immutable list of characters}
+\item Erlaubt bekannte Techniken:
+	\begin{itemize}
+	\item lesender Index-Zugriff -- einzelnen Buchstaben herausgreifen
+	\item Slicing -- Substring herausnehmen
+	\end{itemize}
+\item Aber: \emph{Immutable}
+	\begin{itemize}
+	\item Kann nur als ganzes neu erstellt werden
+	\item Einzelne Buchstaben austauschen geht nicht
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: Strings]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+text = "These go to eleven"
+
+print(text[0])     # 'T'
+print(text[-1])    # 'n'
+print(text[:5])    # 'These'
+
+# text[0] = "t"    -- kein Schreibzugriff
+
+text = "It's one louder" 
+# Neukonstruktion okay
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{tuple}s}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Wie Lists: Datencontainer
+\item Aber: \emph{immutable}
+\item In (runden Klammern) eingefasst
+\item Kein \texttt{append}, \texttt{delete}, \texttt{sort}, ...
+\item Addition konstruiert neuen \inPy{tuple}
+\item Häufig Rückgabetyp von Funktionen
+	\begin{itemize}
+	\item Beispiel \inPy{divmod} Quotient und Rest als \inPy{tuple}
+	\item \inPy{divmod(20, 3)} \thus ~ \inPy{(6, 2)}
+	\end{itemize}
+
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: \texttt{tuple}s]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+t = (1, 2, 3)
+print(t)        #  (1, 2, 3)
+print(t[0])     #  1
+# t[0] = -1     -- kein Schreibzugriff
+t = (-1, -2, -3)
+
+t = tuple([4, 5, 6])
+# Umwandlung list zu tuple
+
+t = tuple("text")
+# Umwandlung String zu tuple.
+# ('t', 'e', 'x', 't')
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{set}s und \inPy{frozenset}s}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item \inPy{set}s
+	\begin{itemize}
+	\item Datencontainer für \emph{eindeutige Werte}
+	\item \emph{mutable}
+	\item In \{geschweifte Klammern\} eingefasst
+	\item Wichtige Methoden: \texttt{add}, \texttt{clear}, \texttt{difference}, \texttt{intersection}, \texttt{union}
+	\item Addition nicht definiert für \inPy{set}s
+	\end{itemize}
+\item \inPy{frozenset}s
+	\begin{itemize}
+	\item Wie \inPy{set}s, aber \emph{immutable}
+	\item kein eigenes Symbol, sondern über Constructor: \inPy{variable = frozenset(Liste)}
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: \texttt{set}s]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+s = {1, 2, 3, 2}
+print(s)        #  (1, 2, 3)
+print(t[0])     #  1
+# s[0] = -1     
+# kein Schreibzugriff auf Elemente
+
+s.add(4)        # aber Änderung möglich
+s = s.intersection({2, 4, 6})
+print(s)        # {2, 4}
+
+s = set("aardvark")
+print(s)        #{'r', 'v', 'k', 'd', 'a'}
+# Sortierung geht ggf. verloren.
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{range}s}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Platzsparender Container für Folgen von Ganzzahlen
+\item \inPy{Start, Stop, Schrittweite}
+\item Speichert tatsächlich nur die 3 Werte, generiert Zahlen \enquote{on demand}
+\item \texttt{Start} eingeschlossen, \texttt{Stop} ausgeschlossen
+\item \texttt{Schrittweite} kann ausgelassen werden (dann automatisch 1)
+\item \texttt{Schrittweite} kann auch negativ sein
+\item \texttt{Start}, \texttt{Stop}, \texttt{Schrittweite}: \emph{nur Ganzzahlen}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: \texttt{range}s]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+r = range(1, 10, 2)
+print(r)         # range(1, 10, 2)
+print(list(r))   # [1, 3, 5, 7, 9]
+
+r = range(1, 5)
+print(list(r))   # [1, 2, 3, 4]
+
+print(list(range(5, 0, -1)))
+# [5, 4, 3, 2, 1]
+
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{dict}ionaries}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Liste mit \emph{Schlüsseln} statt Indices
+\item Schlüssel: Beliebiger Wert, \zB ein String
+\item \{Geschweifte Klammern\}, Schlüssel-Wert-Paare durch Doppelpunkt verbunden
+\item Wichtige Methoden:
+	\begin{itemize}
+	\item \texttt{keys} -- gibt eine Liste von Schlüsseln aus
+	\item \texttt{values} -- gibt eine Liste von Werten aus
+	\item \texttt{items} -- gibt eine Liste von Tupeln aus Schlüssel und Wert aus
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: \texttt{range}s]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+d = {'north' : 12, 'east' : 9,
+     'south' :  6, 'west' : 3}
+
+print(d['north'])      # 12
+print(list(d.keys()))
+# ['north', 'east', 'south', 'west']
+
+print(list(d.items())[0:2])
+# [('north', 12), ('east', 9)]
+
+d['north'] = 0
+# auch Schreibzugriff möglich
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Spezielle Funktionen und Operatoren für Container (I)}
+%
+\begin{itemize}
+\item \inPy{in}: Boolean, ob Wert in Container ist.
+	\begin{itemize}
+	\item \inPy{1 in [1, 2, 3]} gibt \inPy{True}
+	\item \inPy{[1] in [1, 2, 3]} gibt \inPy{False}
+	\item \inPy{1 in {1 : 'a', 2 : 'b'}} gibt \inPy{True}
+	\item \inPy{'a' in {1 : 'a', 2 : 'b'}} gibt \inPy{False}
+	\item \inPy{'a' in {1 : 'a', 2 : 'b'}.values()} gibt \inPy{True}
+	\end{itemize}
+\item \inPy{len} -- Anzahl Elemente in einem Container
+\item \inPy{reversed} und \inPy{sorted} -- \emph{Kopien} mit umgedrehter Reihenfolge bzw. Sortierung
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Spezielle Funktionen und Operatoren für Container (II)}
+%
+\begin{itemize}
+\item Vergleichsoperatoren (\texttt{==}, \texttt{<}, \texttt{>})
+	\begin{itemize}
+	\item Elementweiser Vergleich, Entscheidung beim ersten nicht-gleichen Wert
+	\item Wie bei Strings: \inPy{"aardvark" < "antilope"} (Entscheidung beim zweiten Zeichen, da erstes Zeichen gleich)
+	\item \inPy{[1, 5, 7] < [1, 5, 9, -3]} aus selbem Grund.
+	\end{itemize}
+\item \inPy{zip} -- mehrere Listen zu Tupeln zusammenschnüren\\
+	\begin{codebox}[Beispiel: \texttt{zip}]
+	\begin{minted}[linenos, fontsize=\scriptsize]{python}
+A = ["Gryffindor", "Ravenclaw", "Hufflepuff", "Slytherin"]
+B = ["red", "blue", "yellow", "green"]
+print(list(zip(A, B)))
+	\end{minted}
+	\end{codebox}
+	\begin{cmdbox}[Ausgabe: \texttt{zip}]
+	\begin{minted}[fontsize=\scriptsize]{text}
+[("Gryffindor", "red"), ("Ravenclaw", "blue"),
+ ("Hufflepuff", "yellow"), ("Slytherin", "green")]
+	\end{minted}
+	\end{cmdbox}
+\end{itemize}
+%
+\end{frame}

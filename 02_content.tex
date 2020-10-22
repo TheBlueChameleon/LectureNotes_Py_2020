@@ -11,22 +11,27 @@
 \begin{columns}[T]
 \column{.5\linewidth}
 \begin{itemize}
+\item Kommentare
+	\begin{itemize}
+	\item Raute-Symbol (\texttt{\#}) leitet ein 
+	\item Ignoriert alles bis Zeilenende
+	\end{itemize}
 \item Kommandozeile
 	\begin{itemize}
 	\item Text-Befehle mit Parametern
 	\item Arbeitsverzeichnis
 	\item Python-Interpreter aufrufen
 	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
 \item Befehl \inPy{print}
 	\begin{itemize}
 	\item Text-Ausgabe
 	\item Argumente in Klammern, durch Kommata getrennt
 	\item Texte in Anführungszeichen
 	\end{itemize}
-\end{itemize}
-%
-\column{.5\linewidth}
-\begin{itemize}
 \item Variablen
 	\begin{itemize}
 	\item Speicherstellen mit veränderlichem Inhalt
@@ -40,37 +45,6 @@
 \begin{center}
 	\emph{Noch Fragen?}
 \end{center}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]{Kommentare}
-%
-\begin{minipage}[t]{.44\linewidth}
-\begin{itemize}
-\item Text-Teile, die vom Interpreter ignoriert werden
-\item Erinnerungen und Erklärungen für uns als ProgrammiererInnen
-\item Zeilen zum Testen schnell ein- und ausschalten
-\item Beginnen mit Raute (\texttt{\#})
-\item Gehen bis zum Ende der Zeile
-\end{itemize}
-\end{minipage}
-%
-\begin{minipage}[t]{.55\linewidth}
-\phantom{x}
-\begin{codebox}[Code mit Kommentaren]
-\begin{minted}[linenos, fontsize=\scriptsize]{python}
-print("Hello World")  # Textausgabe
-
-# Auch als eigene Zeile
-
-# Verschachtelte # Kommentare existieren nicht
-
-# print("Code, der nicht ausgeführt wird")
-\end{minted}
-\end{codebox}
-\end{minipage}
 %
 \end{frame}
 
