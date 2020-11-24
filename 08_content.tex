@@ -1,0 +1,338 @@
+% =========================================================================== %
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Recap}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Klassen
+	\begin{itemize}
+	\item Datensammlung mit Kontext
+	\item Klassen- und Instanz-Attribute
+	\item Methoden: Funktionen, die auf Instanzen zugreifen
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item Dunders: Automatisch aufgerufene Methoden
+	\begin{itemize}
+	\item \inPy{__init__} -- Konstruktor
+	\item \inPy{__str__} und \inPy{__repr__} -- Textdarstellungen
+	\item \inPy{__call__} -- Aufruf als Funktion
+	\end{itemize}
+\end{itemize}
+
+\end{columns}
+%
+\begin{center}
+	\emph{Noch Fragen?}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kapitel 7}
+%
+\begin{itemize}
+\item Dunders: 
+	\begin{itemize}
+	\item Vergleiche
+	\item Rechenoperationen
+	\item Rechtsseitige Operatoren
+	\item Index-Zugriff
+	\item Zahl der Elemente, Absolutbetrag
+	\end{itemize}
+\item Vererbung
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{__eq__}, \inPy{__ne__}, \inPy{__gt__}, \inPy{__ge__}, \inPy{__lt__} und \inPy{__le__}: Vergleiche}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Funktionen, die entscheiden, wie zwei Instanzen sich zueinander verhalten
+\item Aufruf über Vergleichsoperator
+\item Vergleichsoperator: \texttt{==}, \texttt{!=}, >, \texttt{>=}, \texttt{<}, \texttt{<=}
+\item Beispiel: \inPy{Instanz1 == Instanz2} 
+\item[\Thus] \inPy{Instanz1.__eq__(Instanz2__)}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: Definition]
+\begin{minted}[fontsize=\scriptsize]{python}
+class Klassenname :
+    def __XX__ (self, rhs) :
+       return ... # True, wenn self XX rhs
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Syntax: Aufruf]
+\begin{minted}[fontsize=\scriptsize]{python}
+print(Instanz1 XX Instanz2)
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Direkter Vergleich von Instanzen]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+class Expartner :
+    # __init__, Klassenattribute, Methode rating wie letztes Mal
+    
+    def __gt__(self, rhs) :
+        return self.rating() > rhs.rating()
+    
+    def __le__(self, rhs) :
+        return not (self < rhs)
+
+# Definition Instanzen ex1, ex2 wie letzte Woche
+
+betterText = "nicht" if ex1 <= ex2 else ""
+print(f"Mit {ex1.name} war es {betterText} besser als mit {ex2.name}.")
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{hintbox}[Tipp: Sortierbare Listen]
+Sobald eine Klasse entweder \inPy{__lt__} oder \inPy{__gt__} implementiert, ist es möglich, \inPy{sorted} bzw. \inPy{listOfInstances.sort()} anzuwenden!
+\end{hintbox}
+%
+\begin{codebox}[Beispiel: Listen Sortieren]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+# Klasse Expartner wie vorhin
+# Einige Instanzen von Expartner mit Namen ex1, ex2, ...
+
+listOfExes = [ex1, ex2, ex3, ex4]
+
+for i, ex in enumerate(sorted(listOfExes, reverse=True)) :
+    print(f"Rank #{i+1}: {ex.name}")
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Typensicherheit}
+%
+\begin{itemize}
+\item Meiste Sprachen: Datentyp in Parameterliste vorgegeben.
+\item Python: \emph{Dynamic Typing} -- alles geht
+\item Resultat: syntaktisch korrekte, aber unsinnige Aufrufe
+\end{itemize}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Unsinniger Aufruf]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+# Klasse Expartner wie zuvor
+# Instanz MyEx
+
+print( myEx > 7 )
+# Gleichbedeutend mit myEx.__gt__(7)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Unsinniger Aufruf]
+\begin{minted}[fontsize=\scriptsize]{text}
+Traceback (most recent call last):
+  File "exes.py", line 289, in <module>
+    print(allExes[0] < 0)
+TypeError: '<' not supported between
+  instances of 'Expartner' and 'int'
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Typensicherheit manuell einbringen}
+%
+\begin{codebox}[Beispiel: Typensicherer Vergleich]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+class Expartner :
+    # alles wie immer
+    
+    def __gt__ (self, rhs) :
+        if type(rhs) in (int, float) :
+            return self.rating() > rhs
+        elif type(rhs) == Expartner :
+            return self.rating() > rhs.rating()
+        else :
+            raise Exception(f"Typen 'Expartner' und '{type(rhs)}'nicht vergleichbar")
+            # Löst Fehlermeldung aus und beendet Programm
+            # Mehr dazu in Kapitel 9
+
+print( myEx > 7 )  # funktioniert!
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{__add__}, \inPy{__neg__}, \inPy{__sub__}, \inPy{__mul__}, \inPy{__truediv__}, \inPy{__floordiv__} und \inPy{__matmul__}: Rechenoprationen}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Logik wie bei Vergleichsoperationen
+\item Implementieren Operatoren \inPy{A + B}, \inPy{-A}, \inPy{A - B}, \inPy{A * B}, \inPy{A / B}, \inPy{A // B} und\\
+ \texttt{A @ B}
+\item Operator \texttt{@}: \emph{frei wählbare Verknüpfung}, üblicherweise aber Matrixprodukt
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: Definition]
+\begin{minted}[fontsize=\scriptsize]{python}
+class Klassenname :
+    def __XX__ (self, rhs) :
+       return ...
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Syntax: Aufruf]
+\begin{minted}[fontsize=\scriptsize]{python}
+print(Instanz1 XX Instanz2)
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\vspace{6pt}
+\emph{Im Weiteren: Matrizen. Ich weiß nicht welche Bedeutung \texttt{Ex1 // Ex2} haben könnte...}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}
+%
+\begin{hintbox}[Tipp: Operatoren durch ihre Gegenstücke definieren]
+Es kann aufwändig, zumindest aber lästig werden, die sehr ähnlichen Operationen für eine Klasse zu definieren. Wir finden oft redundanten Code, der sich nur durch Kleinigkeiten unterscheidet. Bei Operatoren können wir das umgehen, indem wir nur einige wenige Operationen voll implementieren. Der Rest wird durch ihr gegenteil ausgedrückt: \inPy{A >= B} ist \inPy{not A < B} und \inPy{A - B} ist \inPy{-A + B} (\inPy{__neg__} und \inPy{__add__})
+\end{hintbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{hintbox}[Tipp: Gemeinsamkeiten in separater Methode]
+Der o.\;g. Tipp funktioniert nicht immer. Wo zumindest Gemeinsamkeiten bestehen, kann eine \enquote{versteckte Methode} die gemeinsame Vorarbeit leisten.
+\end{hintbox}
+%
+\begin{codebox}[Schema: Aufteilung in geteilte und spezielle Arbeitsblöcke]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+def gemeinsamerCode(gemeinsameParameter) :
+    ...
+
+def procA(gemeinsameParamter, spezifischeParameter) :
+   gemeinsamerCode(gemeinsameParamter)
+   spezifischer Code A
+   ...
+
+def procB(gemeinsameParamter, spezifischeParameter) :
+   gemeinsamerCode(gemeinsameParamter)
+   spezifischer Code B
+   ...
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Syntax: Definition]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+class Klassenname :
+    def __XX__ (lhs, rhs) :
+       return ... # true, wenn lhs XX rhs
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Aufruf: Title goes here]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+bar
+\end{minted}
+\end{codebox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kapitel 6}
+%
+\begin{itemize}
+\item Optionale Parameter
+\item Variadische Funktionen
+\item Funktionen als Rückgabewerte
+\item Lambdas
+\item Rekursion
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{while}-Schleifen}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item x
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: Title goes here]
+\begin{minted}[fontsize=\scriptsize]{python}
+Stuff
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Title goes here]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+x
+\end{minted}
+\end{codebox}
+%
+\end{frame}

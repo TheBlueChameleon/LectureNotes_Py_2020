@@ -52,6 +52,46 @@
 
 % =========================================================================== %
 
+\begin{frame}[fragile]{Durch die Übung inspirierte Frage}
+%
+\begin{center}
+	\begin{Large}
+	\emph{Ist es möglich, Gleichungen eingeben und auswerten zu lassen?}
+	\end{Large}
+\end{center}
+%
+\begin{itemize}
+\item Ja, aber eine gefährliche. (Oder eine ungefährliche, sehr komplizierte)
+\item Befehl \inPy{eval} nimmt einen String, und führt diesen als Python-Code aus.
+\item Ergebnis dieser Ausführung als Rückgabewert: \inPy{result = eval("x** 2 + 5")}
+\item String kann \emph{beliebigen} Python-Code enthalten, auch schadhaften Code.
+\end{itemize}
+%
+\begin{warnbox}[Code Injection und \texttt{eval}]
+Eingaben durch den User sind immer eine Gefahrenquelle, sowohl durch Versehen als auch durch boshafte Absicht.\\
+Sie sollten \emph{immer} auf Sinnhaftigkeit getestet und möglichst stark beschränkt werden.
+\end{warnbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{xkcd: Exploits of a Mom}
+%
+\begin{center}
+	\includegraphics[width=.8\linewidth]{./gfx/xkcd-codeInjection}\\
+	\vspace{3pt}
+	
+	\scriptsize \emph{Her daughter is named Help I'm trapped in a driver's license factory.}
+	\vspace{6pt}\\
+	
+	Source: \url{https://xkcd.com/327/}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}{Kapitel 3}
 %
 \begin{itemize}
@@ -695,7 +735,7 @@ Methoden
 %
 \begin{minipage}{.49\linewidth}
 \phantom{x}
-\begin{codebox}[Beispiel: \texttt{is} vs. \texttt{==}]
+\begin{codebox}[Beispiel: \texttt{append}{,} \texttt{insert}{,} \texttt{remove}]
 \begin{minted}[fontsize=\scriptsize, linenos]{python}
 L = [1, 2, 3]
 
@@ -771,11 +811,11 @@ Methoden... Fortsetzung
                   raster equal height,
                   nobeforeafter,
                   raster column skip=0.5cm]
-\begin{codebox}[Beispiel: \texttt{is} vs. \texttt{==}]
+\begin{codebox}[Beispiel: \texttt{sort}{,} \texttt{reverse}{,} \texttt{pop}]
 \begin{minted}[fontsize=\scriptsize, linenos]{python}
 langs = ["C", "Python", "C++", "Java",
-        "BASIC", "Assembly", "LaTeX",
-        "bash", "gnuPlot", "makefile"]
+         "BASIC", "Assembly", "LaTeX",
+         "bash", "gnuPlot", "makefile"]
 
 langs.sort()
 print(langs)
@@ -796,9 +836,9 @@ print(langs)
 ['makefile', 'gnuPlot', 'bash', 'Python',
  'LaTeX', 'Java', 'C++', 'C', 'BASIC',
  'Assembly']
-Assembly
-['makefile', 'gnuPlot', 'bash', 'Python',
- 'LaTeX', 'Java', 'C++', 'C', 'BASIC']
+makefile
+['gnuPlot', 'bash', 'Python', 'LaTeX', 
+ 'Java', 'C++', 'C', 'BASIC', 'Assembly']
 \end{minted}
 \end{cmdbox}
 \end{tcbraster}

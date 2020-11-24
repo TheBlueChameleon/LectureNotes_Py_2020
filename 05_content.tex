@@ -662,3 +662,19 @@ print(foo)
 \end{cmdbox}
 %
 \end{frame}
+
+% =========================================================================== %
+
+\begin{frame}
+%
+\begin{hintbox}[Abhängigkeiten einfach halten]
+Schreibt Funktionen nach den Grundregeln:
+\begin{itemize}
+\item Einziger \enquote{Daten-Eingang} ist die Parameterliste
+\item Einziger \enquote{Daten-Ausgang} ist der Rückgabewert
+\item Alle Variablen in Funktionen werden vor dem ersten Lesen mit Startwert definiert (und damit implizit zu lokalen Variablen)
+\end{itemize}
+Andernfalls werden die Abhängigkeiten sehr konfus, schwer zu warten und anfällig für viele Fehler, da man immer den Zustand des \emph{ganzen Programms} kennen muss.
+\end{hintbox}
+%
+\end{frame}

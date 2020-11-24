@@ -50,6 +50,29 @@
 
 % =========================================================================== %
 
+\begin{frame}[fragile]{Aus den Übungen}
+%
+\begin{itemize}
+\item \inPy{id} ist eigentlich geschützter Begriff (Syntax Highlighting) -- mein Fehler
+\item Aufgabe mit Anführungszeichen
+	\begin{itemize}
+	\item Häufigste Lösung: \emph{Escape Characters}:
+		\begin{itemize}
+		\item \inPy{stringVar = "\"That's a pity\", she said."}
+		\item \emph{Escape Character}: Zeichen, das mitteilt, dass das folgende Zeichen anders interpretiert werden soll.
+		\item Beispiele: \inPy{"\n"} -- newline (Zeilenumbruch); \inPy{"\t"} -- Tabulator, \inPy{"\\"} -- Backslash
+		\end{itemize}
+	\item Alternative: \emph{String Concatenation} und Einfache + Doppelte Anführungszeichen
+		\begin{itemize}
+		\item \inPy{stringVar = '"That' + "'s a pity" + '", she said."}
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}[fragile]{Datentypen umwandeln}
 %
 \begin{itemize}
@@ -480,12 +503,12 @@ else :
 \begin{itemize}
 \item Leerzeichen oder Tabulatoren
 \item Nicht gemischt
-\item Gleiche Einrückungs-Tiefe über den gesamten Code
+\item Gleiche Einrückungs-Schritte über den gesamten Code
 \end{itemize}
 %
 \begin{hintbox}
 Empfehlung der Python-Entwickler: Vier Leerzeichen\\
-Viele Editoren automatisieren dies mit Tabulator-Taste
+Viele Editoren automatisieren dies mit Tabulator-Taste (oder sogar automatisch nach Code-Elementen)
 \end{hintbox}
 %
 \end{frame}
