@@ -50,7 +50,7 @@
                   raster equal height,
                   nobeforeafter,
                   raster column skip=0.5cm]
-\begin{codebox}[Beispiel: Weihnachtsbaum mit zwei Schleifen]
+\begin{codebox}[Beispiel: Weihnachtsbaum mit drei Schleifen]
 \begin{minted}[fontsize=\scriptsize, linenos]{python}
 height = 7
 
@@ -64,8 +64,10 @@ for row in range(height) :
 \end{minted}
 \end{codebox}
 %
-\begin{codebox}[Beispiel: Weihnachtsbaum mit einer Schleife]
+\begin{codebox}[Beispiel: Weihnachtsbaum mit zwei Schleifen]
 \begin{minted}[fontsize=\scriptsize, linenos]{python}
+height = 7
+
 for   row    in range(    height    ) :
   for column in range(2 * height + 1) :
     f = abs(column - height) < (row + 1)
@@ -75,6 +77,67 @@ for   row    in range(    height    ) :
 \end{minted}
 \end{codebox}
 \end{tcbraster}
+%
+\begin{codebox}[Beispiel: Weihnachtsbaum mit einer Schleife]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+height = 7
+
+for row in range(height) :
+  print(" " * (height - row - 1), "*" * (2 * row + 1))
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Gedankliche Schritte -- Analyse und Synthese}
+%
+\begin{itemize}
+\item \emph{Legen Sie eine String-Variable an. Bestimmen Sie, welches Schriftzeichen jeweils wie oft in diesem Text vorkommt.}
+\item \emph{jedes Schriftzeichen} \Thus Finde heraus, welche Schriftzeichen vorkommen
+	\begin{itemize}
+	\item Input: String. Gewünschter Output: Liste von Buchstaben
+	\item Betrachte Container-Typen \Thus \inPy{set}: nur einmalige Elemente
+	\item Kann aus direkt \inPy{str}ings erstellt werden
+	\item[\Thus] Teilaufgabe gelöst
+	\end{itemize}
+\item \emph{Wie oft diese vorkommen} \Thus Zähle Schriftzeichen
+	\begin{itemize}
+	\item Wieder: Liste speichern. Zuordnung Schriftzeichen \thus Anzahl \Thus \inPy{dict}
+	\item Zählen: Manuell: \inPy{for}-Schleife
+	\item Oder Automatisch: Methode \inPy{str.count}
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+%
+\begin{codebox}[Beispiel: Buchstaben Zählen]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+text = "the quick brown fox jumps over the lazy dog"
+uniqueChars = set(text)
+sortedChars = sorted(uniqueChars)
+
+# manuelle Version
+counts = {char : 0 for char in uniqueChars}      # dict mit Startwerten 0 vorbereiten
+for char in text :                               # manuell zählen
+  counts[char] += 1
+
+# automatische Version
+autoCounts = {char : text.count(char) for char in uniqueChars}
+
+
+print("Analyse von '" + text + "':")
+for char in sortedChars :
+  print(char, "kommt", counts[char], "mal vor;",
+        "automatische Zählung ergibt auch", autoCounts[char])
+\end{minted}
+\end{codebox}
 %
 \end{frame}
 

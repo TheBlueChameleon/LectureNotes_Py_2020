@@ -57,12 +57,44 @@
 
 % =========================================================================== %
 
+\begin{frame}[fragile]{\inPy{__len__} und \inPy{__abs__}}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Werden aufgerufen von \inPy{len(Instanz)} bzw. \inPy{abs(Instanz)}
+\item Bedeutung frei wählbar, sollte aber die Eigenschaften wiederspiegeln, die man sich unter Absolutbetrag und Länge vorstellt
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: \texttt{\_\_abs\_\_}]
+\begin{minted}[fontsize=\scriptsize, linenos]{python3}
+class Expartner :
+    # Attribute und Definitionen wie
+    # beim letzten Mal
+    
+    def __abs__(self) :
+        retrun self.rating()
+    
+    def __len__(self) :
+        return self.height
+
+print(f"Zeit mit {ex.name}: {abs(ex)}")
+print(f"Größe von {ex.name}: {len(ex)}")
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}[fragile]{\inPy{__eq__}, \inPy{__ne__}, \inPy{__gt__}, \inPy{__ge__}, \inPy{__lt__} und \inPy{__le__}: Vergleiche}
 %
 \begin{columns}[T]
 \column{.5\linewidth}
 \begin{itemize}
-\item Funktionen, die entscheiden, wie zwei Instanzen sich zueinander verhalten
+\item Funktionen, die entscheiden, in welchem Verhältnis zwei Instanzen zueinander stehen
 \item Aufruf über Vergleichsoperator
 \item Vergleichsoperator: \texttt{==}, \texttt{!=}, >, \texttt{>=}, \texttt{<}, \texttt{<=}
 \item Beispiel: \inPy{Instanz1 == Instanz2} 
@@ -71,7 +103,7 @@
 %
 \column{.5\linewidth}
 \begin{codebox}[Syntax: Definition]
-\begin{minted}[fontsize=\scriptsize]{python}
+\begin{minted}[fontsize=\scriptsize]{python3}
 class Klassenname :
     def __XX__ (self, rhs) :
        return ... # True, wenn self XX rhs
@@ -79,7 +111,7 @@ class Klassenname :
 \end{codebox}
 %
 \begin{codebox}[Syntax: Aufruf]
-\begin{minted}[fontsize=\scriptsize]{python}
+\begin{minted}[fontsize=\scriptsize]{python3}
 print(Instanz1 XX Instanz2)
 \end{minted}
 \end{codebox}
@@ -92,7 +124,7 @@ print(Instanz1 XX Instanz2)
 \begin{frame}[fragile]
 %
 \begin{codebox}[Beispiel: Direkter Vergleich von Instanzen]
-\begin{minted}[linenos, fontsize=\scriptsize]{python}
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
 class Expartner :
     # __init__, Klassenattribute, Methode rating wie letztes Mal
     
@@ -120,7 +152,7 @@ Sobald eine Klasse entweder \inPy{__lt__} oder \inPy{__gt__} implementiert, ist 
 \end{hintbox}
 %
 \begin{codebox}[Beispiel: Listen Sortieren]
-\begin{minted}[linenos, fontsize=\scriptsize]{python}
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
 # Klasse Expartner wie vorhin
 # Einige Instanzen von Expartner mit Namen ex1, ex2, ...
 
@@ -148,7 +180,7 @@ for i, ex in enumerate(sorted(listOfExes, reverse=True)) :
                   nobeforeafter,
                   raster column skip=0.5cm]
 \begin{codebox}[Beispiel: Unsinniger Aufruf]
-\begin{minted}[fontsize=\scriptsize, linenos]{python}
+\begin{minted}[fontsize=\scriptsize, linenos]{python3}
 # Klasse Expartner wie zuvor
 # Instanz MyEx
 
@@ -175,7 +207,7 @@ TypeError: '<' not supported between
 \begin{frame}[fragile]{Typensicherheit manuell einbringen}
 %
 \begin{codebox}[Beispiel: Typensicherer Vergleich]
-\begin{minted}[fontsize=\scriptsize, linenos]{python}
+\begin{minted}[fontsize=\scriptsize, linenos]{python3}
 class Expartner :
     # alles wie immer
     
@@ -210,7 +242,7 @@ print( myEx > 7 )  # funktioniert!
 %
 \column{.5\linewidth}
 \begin{codebox}[Syntax: Definition]
-\begin{minted}[fontsize=\scriptsize]{python}
+\begin{minted}[fontsize=\scriptsize]{python3}
 class Klassenname :
     def __XX__ (self, rhs) :
        return ...
@@ -218,14 +250,14 @@ class Klassenname :
 \end{codebox}
 %
 \begin{codebox}[Syntax: Aufruf]
-\begin{minted}[fontsize=\scriptsize]{python}
+\begin{minted}[fontsize=\scriptsize]{python3}
 print(Instanz1 XX Instanz2)
 \end{minted}
 \end{codebox}
 \end{columns}
 %
 \vspace{6pt}
-\emph{Im Weiteren: Matrizen. Ich weiß nicht welche Bedeutung \texttt{Ex1 // Ex2} haben könnte...}
+\emph{Im Weiteren: Vektoren. Ich weiß nicht welche Bedeutung \texttt{Ex1 // Ex2} haben könnte...}
 %
 \end{frame}
 
@@ -241,28 +273,407 @@ Es kann aufwändig, zumindest aber lästig werden, die sehr ähnlichen Operation
 
 % =========================================================================== %
 
+\begin{frame}
+%
+\begin{center}
+	(Code: \texttt{004a-vectors.py})
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Links- und Rechtsseitige Operatoren}
+%
+Problem erkannt: Multiplikation \emph{von links} wird der Klasse \inPy{int} zugeordnet:
+\begin{warnbox}[Beispiel: Title goes here, leftupper=6mm]
+\begin{minted}[linenos, firstnumber=90, fontsize=\scriptsize]{python3}
+print("Reskalieren  :", v * 2)
+print("Rechtseitig  :", 2 * v)
+\end{minted}
+\end{warnbox}
+%
+\begin{cmdbox}[Ausgabe: Unsinniger Aufruf]
+\begin{minted}[fontsize=\scriptsize]{text}
+Traceback (most recent call last):
+  File "004a-vectors.py", line 91, in <module>
+    print("Rechtseitig  :", 2 * v)
+TypeError: unsupported operand type(s) for *: 'int' and 'vector3D'
+\end{minted}
+\end{cmdbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{NotImplemented} und Rechtsseitige Operatoren}
+%
+\begin{itemize}
+\item Besonderer Rückgabewert: \inPy{NotImplemented}
+\item Wird von Python abgefangen. Je nach Szenario: Verschiedene Strategien
+\item Hier: Versuch, die Methode \inPy{__rmul__} aufzurufen
+	\begin{itemize}
+	\item Wie \inPy{__mul__}, aber geht davon aus dass \inPy{self} auf der \emph{rechten} Seite steht
+	\item[\Thus] \texttt{r} in \texttt{rmul}
+	\end{itemize}
+\item Ebenso: \inPy{__radd__}, \inPy{__rsub__}, ...
+\item Wenn diese Methoden nicht existieren: Fehlermeldung und Abbruch
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Multiplikation von links ermöglichen]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+class Vector3D :
+    # alles wie immer
+    
+    # ........................................................................ #
+    
+    def __mul__(self, rhs) :
+        if type(rhs) == vector3D :
+            return self.x * rhs.x  +  self.y * rhs.y  +  self.z * rhs.z
+        elif type(rhs) in (int, float) :
+            return vector3D(self.x * rhs, self.y * rhs, self.z * rhs)
+        else :
+            return NotImplemented   #  <== Python Alternative suchen lassen
+    
+    # ........................................................................ #
+    
+    def __rmul__(self, lhs) :       #  <== und Alternative anbieten
+      return self * lhs;
+
+print(2 * v)    # ruft jetzt __rmul__(v, 2) auf!
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Index-Zugriff}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Szenario: Zugriff über Index gewünscht. Z.\,B. \inPy{v[1]} \thus \inPy{v.x}
+\item Tatsächlich nützlich, da so Schleifen leichter machbar
+\item Oft auch: Unsinnige Zugriffe oder Werte verbieten
+\item Lösung über zwei neue Dunders:
+	\begin{itemize}
+	\item \inPy{__getitem__(self, index)} \\ Lesezugriff
+	\item \inPy{__setitem__(self, index, value)} \\ Schreibzugriff
+	\end{itemize}
+\item \texttt{index} ist dabei der Ausdruck in den \texttt{[}eckigen Klammern\texttt{]}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: Title goes here]
+\begin{minted}[fontsize=\scriptsize]{python3}
+class Klassenname :
+    ...
+    
+    def __getitem__(self, index) :
+        return ...
+    
+    def __setitem__(self, index, value) :
+        ... = value
+\end{minted}
+\end{codebox}
+%
+\begin{itemize}
+\item \texttt{index} kann beliebige Datentypen haben!
+\item Vgl. \inPy{dict}s!
+\item \inPy{Instanz[1, 2]} \Thus \inPy{index = (1, 2)}, also ein \inPy{tuple}
+\end{itemize}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Index-Getter und -Setter]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+class Vector3D :
+    # alles wie immer
+    # ........................................................................ #
+    def _checkIndex(self, index) :
+        if type(index) != int :
+            raise Exception("Index-Typ nicht unterstützt!")
+        elif index not in (1, 2, 3) :
+            raise Exception("Index nicht im zulässigen Bereich")
+    # ........................................................................ #    
+    def __getitem__(self, index) :
+        self._checkIndex(index)
+        if   index == 1 : return self.x
+        elif index == 2 : return self.y
+        elif index == 3 : return self.z    
+    # ........................................................................ #    
+    def __setitem__(self, index, value) :
+        self._checkIndex(index)
+        if   index == 1 : self.x = value
+        elif index == 2 : self.y = value
+        elif index == 3 : self.z = value
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
 \begin{frame}[fragile]
 %
 \begin{hintbox}[Tipp: Gemeinsamkeiten in separater Methode]
-Der o.\;g. Tipp funktioniert nicht immer. Wo zumindest Gemeinsamkeiten bestehen, kann eine \enquote{versteckte Methode} die gemeinsame Vorarbeit leisten.
+Wo zumindest Gemeinsamkeiten zwischen Methoden bestehen, kann eine \enquote{versteckte Methode} die gemeinsame Vorarbeit leisten.
+
+Oft werden Funktionen \enquote{versteckt}, indem ein Unterstrich (\texttt{\_}) davor gesetzt wird.
 \end{hintbox}
 %
 \begin{codebox}[Schema: Aufteilung in geteilte und spezielle Arbeitsblöcke]
-\begin{minted}[linenos, fontsize=\scriptsize]{python}
-def gemeinsamerCode(gemeinsameParameter) :
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+def _gemeinsamerCode(gemeinsameParameter) :
     ...
 
 def procA(gemeinsameParamter, spezifischeParameter) :
-   gemeinsamerCode(gemeinsameParamter)
+   _gemeinsamerCode(gemeinsameParamter)
    spezifischer Code A
    ...
 
 def procB(gemeinsameParamter, spezifischeParameter) :
-   gemeinsamerCode(gemeinsameParamter)
+   _gemeinsamerCode(gemeinsameParamter)
    spezifischer Code B
    ...
 \end{minted}
 \end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Vererbung}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Idee: neue Klasse erstellen, die eine Erweiterung einer bestehenden Klasse ist
+\item Sprechweise: \emph{Basisklasse} oder \emph{parent class}
+	\begin{itemize}
+	\item Vorlage, wird kopiert
+	\end{itemize}
+\item Sprechweise: \emph{abgeleitete Klasse} oder \emph{derived class}, \emph{child}
+	\begin{itemize}
+	\item Neu angelegt
+	\item Erhält alle Attribute und Methoden der Basisklasse
+	\item Darf beliebige neue Definitionen erhalten
+	\item \enquote{abgeleitete Klasse erbt von Basisklasse}
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: Abgeleitete Klasse erstellen]
+\begin{minted}[fontsize=\scriptsize]{python3}
+class Abgeleitet(BasisKlasse) :
+   # beliebiger Code
+\end{minted}
+\end{codebox}
+%
+\begin{itemize}
+\item Eigenschaften der Basisklasse können überschrieben werden
+\item Ändert sich dann nur in der abgeleiteten Klasse
+\end{itemize}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Abgeleitete Klasse]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+class Vector3D :
+    # ... wie vorhin
+
+class ColourArrow (Vector3D) :
+    Arrowcount = 0    # neues Klassenattribut
+    
+    def __init__(self, x, y, z, color) :
+        # überschreibt / ersetzt alte Methode für abgeleitete Klasse
+        self.x = x
+        self.y = y
+        self.z = z
+        self.color = color
+        ColourArrow += 1
+    
+    def __str__(self) :
+        # ebenfalls: Überschreiben
+        return "(" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + \
+               ") in " + self.color
+
+#cA = ColourArrow(1, 4, 9, "red")     # Aufruf neue Methode
+print( abs(cA) )                      # Aufruf alte Methode
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Bezüge zur Basisklasse -- \inPy{super()}}
+%
+\begin{itemize}
+\item In gezeigter Form: Copy\&Paste-Code von der Basisklasse
+\item Stattdessen: Aufruf von Code der Basisklasse
+\item \inPy{super()}: \enquote{Berechnet} ein Objekt, das formal zur Basisklasse gehört, aber \inPy{self} beschreibt
+\item[\Thus] Methoden der Basisklasse auf \inPy{self} anwendbar
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Abgeleitete Klasse mit \texttt{super()}]
+\begin{minted}[linenos, fontsize=\scriptsize]{python3}
+class Vector3D :
+    # ... wie vorhin
+
+class ColourArrow (Vector3D) :
+    Arrowcount = 0    # neues Klassenattribut
+    
+    def __init__(self, x, y, z, color) :
+        # überschreibt / ersetzt alte Methode für abgeleitete Klasse
+        super().__init__(x, y, z)
+        self.color = color
+        ColourArrow += 1
+    
+    def __str__(self) :
+        # ebenfalls: Überschreiben
+        return str(super()) + " in " + self.color
+
+#cA = ColourArrow(1, 4, 9, "red")     # Aufruf neue Methode
+print( abs(cA) )                      # Aufruf alte Methode
+\end{minted}
+\end{codebox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Multi-Vererbung und Vererbungs-Ebenen}
+%
+\begin{itemize}
+\item abgeleitete Klasse kann selbst wieder Basisklasse sein \Thus mehrere Ebenen möglich
+\item abgeleitete Klasse kann auch Eigenschaften von \emph{mehreren} Basisklassen übernehmen
+\item \inPy{class abgeleiteteKlasse (Basisklasse1, Basisklasse2, ...) :}
+\item Darf nicht zu Namenskollision führen
+	\begin{itemize}
+	\item[\Thus] Wenn \texttt{Basisklasse1} schon \texttt{Methode} implementiert, darf \texttt{Basisklasse2} das nicht auch tun.
+	\end{itemize}
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Klassendiagramm}
+%
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=blue!40!black,
+        text centered, anchor=north, text=white, text width=4.5cm]
+\tikzstyle{instance}=[rectangle, draw=black, rounded corners, fill=green!40!white,
+        text centered, anchor=north, text=black, text width=4.5cm]
+                
+\tikzstyle{inherits}=[->, >=open triangle 90, thick]
+\tikzstyle{instantiates}=[->, >=open diamond, thick]
+%
+\begin{tikzpicture}[node distance=1cm]
+	\node (Animal) [class]                  {\texttt{Animal}};
+	\node (Mammal) [class, below=of Animal] {\texttt{Mammal}};
+	
+	\node (AuxNode01) [          below=of Mammal   , text width=0.0cm] {};
+	\node (AuxNode02) [          right=of Animal   , text width=0.5cm] {};
+	\node (Klasse)    [class,    right=of AuxNode02, text width=3.0cm] {\texttt{Klasse}};
+	\node (Instanz)   [instance, below=of Klasse   , text width=3.0cm] {\texttt{Instanz}};
+	
+	\node (NonWingedMammal) [class, left =of AuxNode01] {\texttt{NonWingedMammal}};
+	\node (NonMarineMammal) [class, right=of AuxNode01] {\texttt{NonMarineMammal}};
+	
+	\node (Dog) [class, below=of AuxNode01] {\texttt{Dog}};
+	
+	\node (d)   [instance, below=of Dog] {\texttt{d}};
+	\node (bat) [instance, right=of d]   {\texttt{bat}};
+	
+	\draw[inherits] (Mammal.north) -| (Animal.south);
+	\draw[inherits] (NonWingedMammal.north) -- ++(0,0.36) -| (Mammal.south);
+	\draw[inherits] (NonMarineMammal.north) -- ++(0,0.40) -| (Mammal.south);
+	\draw[inherits] (Dog.north) -- ++(0,0.40) -| (NonMarineMammal.south);
+	\draw[inherits] (Dog.north) -- ++(0,0.40) -| (NonWingedMammal.south);
+	
+	\draw[instantiates] (d.north)   -- ++(0,0.40) -| (Dog.south);
+	\draw[instantiates] (bat.north) -- ++(0,1.20) -| ([xshift=0.8cm] NonMarineMammal.south);
+\end{tikzpicture}
+%
+\end{frame}
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Multi-Vererbung ...]
+\begin{minted}[fontsize=\scriptsize, linenos]{python3}
+class Animal:
+  def __init__(self, Animal):
+    print(Animal, 'is an animal.');
+    
+class Mammal(Animal):
+  def __init__(self, mammalName):
+    print(mammalName, 
+          'is a warm-blooded animal.')
+    super().__init__(mammalName)
+
+class NonWingedMammal(Mammal):
+  def __init__(self, NonWingedMammal):
+    print(NonWingedMammal, "can't fly.")
+    super().__init__(NonWingedMammal)
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[... Fortsetzung]
+\begin{minted}[fontsize=\scriptsize, linenos, firstnumber=last]{python3}
+class NonMarineMammal(Mammal):
+  def __init__(self, NonMarineMammal):
+    print(NonMarineMammal, 
+          "can't swim.")
+    super().__init__(NonMarineMammal)
+    
+class Dog(NonMarineMammal,
+          NonWingedMammal):
+  def __init__(self):
+    print('Dog has 4 legs.');
+    super().__init__('Dog')
+
+d = Dog()
+print('')
+bat = NonMarineMammal('Bat')
+\end{minted}
+\end{codebox}
+\end{tcbraster}
+%
+\begin{center}
+	\scriptsize
+	Quelle:
+	\url{https://www.programiz.com/python-programming/methods/built-in/super}
+\end{center}
 %
 \end{frame}
 
@@ -274,65 +685,24 @@ def procB(gemeinsameParamter, spezifischeParameter) :
                   raster equal height,
                   nobeforeafter,
                   raster column skip=0.5cm]
-\begin{codebox}[Syntax: Definition]
-\begin{minted}[fontsize=\scriptsize, linenos]{python}
-class Klassenname :
-    def __XX__ (lhs, rhs) :
-       return ... # true, wenn lhs XX rhs
+\begin{cmdbox}[Ausgabe: Multi-Vererbung]
+\begin{minted}[fontsize=\scriptsize]{text}
+Dog has 4 legs.
+Dog can't swim.
+Dog can't fly.
+Dog is a warm-blooded animal.
+Dog is an animal.
+
+Bat can't swim.
+Bat is a warm-blooded animal.
+Bat is an animal.
 \end{minted}
-\end{codebox}
+\end{cmdbox}
 %
-\begin{codebox}[Aufruf: Title goes here]
-\begin{minted}[fontsize=\scriptsize, linenos]{python}
-bar
-\end{minted}
-\end{codebox}
+\begin{hintbox}[Tipp: Klassenbeziehungen einfach halten]
+In der Praxis führt Vererbung über mehrere Ebenen und vor allem Multi-Vererbung zu schwer durchschaubaren Konstrukten.
+Vermeiden Sie komplexe Gebilde, und halten Sie Ihre Klassen so autark wie möglich.
+\end{hintbox}
 \end{tcbraster}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]{Kapitel 6}
-%
-\begin{itemize}
-\item Optionale Parameter
-\item Variadische Funktionen
-\item Funktionen als Rückgabewerte
-\item Lambdas
-\item Rekursion
-\end{itemize}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]{\inPy{while}-Schleifen}
-%
-\begin{columns}[T]
-\column{.5\linewidth}
-\begin{itemize}
-\item x
-\end{itemize}
-%
-\column{.5\linewidth}
-\begin{codebox}[Syntax: Title goes here]
-\begin{minted}[fontsize=\scriptsize]{python}
-Stuff
-\end{minted}
-\end{codebox}
-\end{columns}
-%
-\end{frame}
-
-% =========================================================================== %
-
-\begin{frame}[fragile]
-%
-\begin{codebox}[Beispiel: Title goes here]
-\begin{minted}[linenos, fontsize=\scriptsize]{python}
-x
-\end{minted}
-\end{codebox}
 %
 \end{frame}
