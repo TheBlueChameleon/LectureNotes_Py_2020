@@ -282,12 +282,7 @@ print("total:", total)
 \begin{itemize}
 \item Rest des Schleifenkörpers überspringen
 \item Funktioniert auch für \inPy{while} und \inPy{for}
-\item Sinnvollerweise an Bedingung gekoppelt\\
- \Thus \inPy{if}
-\item Verschachtelte Schleifen: Verlässt jeweils aktuelle Ebene
-	\begin{itemize}
-	\item Wenn mehrere Ebenen verlassen werden sollen: Flags benutzen
-	\end{itemize}
+\item Sinnvollerweise an Bedingung gekoppelt \Thus \inPy{if}
 \end{itemize}
 %
 \begin{codebox}[Beispiel: \texttt{continue}]
@@ -689,7 +684,7 @@ on module level: data = 1
 \item Funktions-Code ist vom übrigen Code \enquote{abgetrennt}
 \item Variablen einer Funktion existieren nur lokal
 \item Sprechweise: Funktion hat seinen eigenen \emph{Scope}, Variablen gehören zu (leben in) einem Scope.
-\item Sichtbarkeit \enquote{von innen nach außen} aber nicht umgekehrt
+\item Sehen-Können \enquote{von innen nach außen} aber nicht umgekehrt
 \item Parameterliste: Bereits Variablen des Funktions-Scope
 \item lokale Neudefinition möglich
 \item Aber: Nicht mehr nach dem ersten Lesen

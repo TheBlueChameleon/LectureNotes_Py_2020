@@ -1,0 +1,685 @@
+% =========================================================================== %
+
+\begin{frame}[t,plain]
+\titlepage
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Recap}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Dateizugriff über Handles
+	\begin{itemize}
+	\item \inPy{handle = open(Dateiname, Modus)}
+	\item Vorgefertigte Objekte
+	\item Dateimodus: Lesen/Schreiben/Anhängen, Binär/Textmodus
+	\item Sollte nach letztem Zugriff geschlossen werden
+	\end{itemize}
+\item In Dateien Schreiben
+	\begin{itemize}
+	\item mit \texttt{handle.write}
+	\item Argument: String im Textmodus, \inPy{bytes}-Objekt im Binärmodus
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item Aus Dateien Lesen
+	\begin{itemize}
+	\item \texttt{handle.read} -- Einlesen als String oder \inPy{bytes}-Objekt
+	\item Ganze Datei oder Maximallänge
+	\item \texttt{readline} und \texttt{readlines} -- ganze Zeile(n)
+	\end{itemize}
+\item Blockstrukturen
+	\begin{itemize}
+	\item \inPy{with open(...) as handle} automatisches Schließen
+	\item realisiert über Dunders \inPy{__enter__} und \inPy{__exit__}
+	\item \inPy{for line in handle}
+	\end{itemize}
+\end{itemize}
+\end{columns}
+%
+\begin{center}
+	\emph{Noch Fragen?}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}{Recap}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Cursorposition Manipulieren
+	\begin{itemize}
+	\item \texttt{handle.tell} -- Aktuelle Position bestimmen
+	\item \texttt{handle.seek(Offset, Startpunkt)} -- Cursor verschieben
+	\end{itemize}
+\item Pickle
+	\begin{itemize}
+	\item Objekte Archivieren
+	\item Funktioniert mit allem
+	\item Kann Schadcode enthalten
+	\item \texttt{pickle.dump} und \texttt{pickle.load}
+	\end{itemize}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item JSON
+	\begin{itemize}
+	\item Austausch mit anderen Programmen
+	\item Funktioniert nur mit bestimmten Datentypen
+	\item Menschenlesbares Format
+	\item \texttt{json.dump} und \texttt{json.load}
+	\item Meist über \inPy{dict}s
+	\end{itemize}
+\item CSV
+	\begin{itemize}
+	\item Information in Spalten
+	\item Objektklasse \texttt{DictReader} von \texttt{csv.reader}
+	\item Iterable -- kann mit \inPy{for} benutzt werden
+	\item Zeilen an Trennzeichen (\zB \texttt{','}) in Listen aufspalten
+	\end{itemize}
+\end{itemize}
+
+\end{columns}
+%
+\begin{center}
+	\emph{Noch Fragen?}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Aus den Übungen}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Title goes here]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+foo
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Beispiel: Title goes here]
+\begin{minted}[fontsize=\scriptsize, linenos]{python}
+bar
+\end{minted}
+\end{codebox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Kapitel 9}
+%
+\begin{itemize}
+\item \inPy{try..except}-Blöcke
+\item Mehrteilige \inPy{except}-Blöcke
+\item \inPy{else} und \inPy{finally}
+\item \inPy{raise} -- Fehler Auslösen 
+\item Eigene Exceptions Anlegen
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{try..except}-Blöcke -- Grundlagen}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Manchmal leichter, auf Fehlermeldungen zu reagieren, als sie im Vorfeld abzufangen
+\item Code-Struktur:
+	\begin{itemize}
+	\item \inPy{try}: Potentiell Fehlerhafter Code
+	\item \inPy{except}: Was, wenn ein Fehler auftritt
+	\end{itemize}
+\item Unterscheidung nach \emph{Fehlerklassen}, aka Ausnahmen oder \emph{Exceptions}
+\item Nach Bearbeitung dieser Umgebung: Programm läuft weiter
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: \texttt{try..except}-Block]
+\begin{minted}[fontsize=\scriptsize]{python}
+try :
+    Code der Ausnahme auslösen könnte
+except Fehlerklasse as varible :
+    Code zur Fehlerbehandlung
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Code mit Fehlerbehandlung]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+import math
+
+for x in range(-3, 4) :
+  try :
+    print( 1/x,  math.log(abs(x-2)) )
+  except ZeroDivisionError as e :
+    print("Fehler:", e)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Fehlerbehandlung]
+\begin{minted}[fontsize=\scriptsize]{text}
+-0.3333333333333333 1.6094379124341003
+-0.5 1.3862943611198906
+-1.0 1.0986122886681098
+Fehler: division by zero
+1.0 0.0
+Traceback (most recent call last):
+  File "<stdin>", line 3, in <module>
+ValueError: math domain error
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\begin{center}
+\begin{itemize}
+\item[\Thus] Ausführung springt bei Fehler in den \inPy{except}-Block und setzt danach normal fort.
+\item[\Thus] Nur passende Fehlerklassen werden abgefangen
+	\begin{itemize}
+	\item[\thus] Hier: \inPy{ZeroDivisionError}
+	\end{itemize}
+\item[\Thus] Unbehandelte Fehler (hier: \inPy{ValueError}) erzeugen immer noch Programmabsturz
+\item[\Thus] Variable \texttt{e} enthält \enquote{Beschreibung des Fehlers}
+	\begin{itemize}
+	\item[\thus] Instanz von \inPy{ZeroDivisionError}
+	\end{itemize}
+\end{itemize}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Code mit Fehlerbehandlung]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+try :
+    for x in range(-3, 4) :
+        print(1 / x)
+except ZeroDivisionError as e :
+    print("Fehler:", e)
+
+print("Erledigt.")
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Fehlerbehandlung]
+\begin{minted}[fontsize=\scriptsize]{text}
+-0.3333333333333333
+-0.5
+-1.0
+Fehler: division by zero
+Erledigt.
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\begin{center}
+\begin{itemize}
+\item[\Thus] Gesamter \inPy{try}-Block wird beim ersten Fehler verlassen und nicht mehr betreten.
+\item[\Thus] Hierarchische Ordnung von \inPy{try} und anderen Strukturen von Bedeutung
+\end{itemize}
+\end{center}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{tuple}s von Fehlerklassen im \inPy{except}-Block}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item In einem \inPy{try}-Block können mehrere Dinge schief gehen
+\item Einfacher Fall: Auf alle möglichen Fehler gleich reagieren
+\item Dann: Fehlerklassen als \inPy{tuple} auflisten
+\item[\Thus] Wenn \emph{irgendeine} der Fehlerklassen passt, wird Behandlung ausgelöst
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: \texttt{try..except}-Block]
+\begin{minted}[fontsize=\scriptsize]{python}
+try :
+    Code der Ausnahme auslösen könnte
+except (Klasse1, Klasse2, ..) as varible :
+    Code zur Fehlerbehandlung
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Code mit Fehlerbehandlung]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+import math
+
+for x in range(-3, 4) :
+    try :
+        print(1/x,  math.log(abs(x-2)))
+    except (ZeroDivisionError,
+            ValueError) as e :
+        print("Fehler:", e)
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Fehlerbehandlung]
+\begin{minted}[fontsize=\scriptsize]{text}
+-0.3333333333333333 1.6094379124341003
+-0.5 1.3862943611198906
+-1.0 1.0986122886681098
+Fehler: division by zero
+1.0 0.0
+Fehler: math domain error
+0.3333333333333333 0.0
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Mehrteilige \inPy{except}-Blöcke}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Denkbar: Unterschiedliche Behandlung von verschiedenen Fehlern nötig
+	\begin{itemize}
+	\item Ungültiger Wert in Datei? Überspringen
+	\item Datei nicht gefunden? Dateiname neu abfragen
+	\end{itemize}
+\item Umsetzung: Mehrere Except-Klauseln
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: \texttt{try..except}-Block]
+\begin{minted}[fontsize=\scriptsize]{python}
+try :
+    Code der Ausnahme auslösen könnte
+except Klasse1 as varible :
+    Code zur Behandlung Klasse1
+except Klasse2 as varible :
+    Code zur Behandlung Klasse2
+except ...
+\end{minted}
+\end{codebox}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Hierarchische Ordnung der Fehlerklassen}
+%
+\begin{itemize}
+\item Fehlerklassen haben hierarchische Ordnung: Überklassen und abgeleitete Klassen
+\item \enquote{X gehört zu Y}
+\item Beispiel: \inPy{ZeroDivisionError} ist auch ein \inPy{ArithmeticError}
+\item Aber: \inPy{ArithmeticError} ist nicht zwingend ein \inPy{ZeroDivisionError}
+\item[\Thus] \inPy{except ArithmeticError} fängt auch einen \inPy{ZeroDivisionError} auf, aber nicht umgekehrt
+\item \inPy{ArithmeticError} umfasst \zB auch \inPy{OverflowError}
+\item Siehe Script oder \url{https://docs.python.org/3/library/exceptions.html} für eine Liste von vordefinierten Fehlerklassen
+\item \inPy{Exception} umfasst \emph{alle} möglichen Fehler.
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: mehrere Fehlerklassen A]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+try :
+    print(1/0)
+    
+except ZeroDivisionError as e :
+    print("ZeroDivisionError")
+    
+except ArithmeticError as e :
+    print("ArithmeticError")
+\end{minted}
+\end{codebox}
+%
+\begin{codebox}[Beispiel: mehrere Fehlerklassen B]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+try :
+    print(1/0)
+    
+except ArithmeticError as e :
+    print("ArithmeticError")
+    
+except ZeroDivisionError as e :
+    print("ZeroDivisionError")
+\end{minted}
+\end{codebox}
+\end{tcbraster}
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{cmdbox}[Ausgabe: mehrere Fehlerklassen A]
+\begin{minted}[fontsize=\scriptsize]{text}
+ZeroDivisionError
+\end{minted}
+\end{cmdbox}
+%
+\begin{cmdbox}[Ausgabe: mehrere Fehlerklassen B]
+\begin{minted}[fontsize=\scriptsize]{text}
+ArithmeticError
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\begin{itemize}
+\item[\Thus] Nur die erste passende Fehlerbehandlung wird ausgeführt
+\item[\Thus] Andere Behandlungen -- auch wenn passend -- werden ignoriert
+\end{itemize}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{\inPy{else} und \inPy{finally} bei \inPy{try..except}-Blöcken}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item \inPy{else}: Ausführung, wenn \emph{kein} Fehler aufgetreten ist
+\item \enquote{Bei Erfolg des \inPy{try}-Blocks, mache ...}
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{itemize}
+\item \inPy{finally}: Ausführung in jedem Fall
+\item selbst bei nicht behandeltem Fehler
+\item \enquote{Sicheres Herunterfahren}
+\item Nach \inPy{else}-Block (falls vorhanden)
+\end{itemize}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Alle Klauseln]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+def divide(x, y):
+    try:
+        result = x / y
+    except ZeroDivisionError:
+        print("division by zero!")
+    else:
+        print("result is", result)
+    finally:
+        print("finally clause")
+
+print("divide(2, 1)")
+divide(2, 1)
+print()
+
+print("divide(2, 0)")
+divide(2, 0)
+print()
+
+print('divide("2", "0")')
+divide("2", "1")
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Alle Klauseln]
+\begin{minted}[fontsize=\scriptsize]{text}
+divide(2, 1)
+result is 2.0
+finally clause
+
+divide(2, 0)
+division by zero!
+finally clause
+
+divide("2", "1")
+finally clause
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in divide
+TypeError: unsupported operand type(s) 
+  for /: 'str' and 'str'
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Fehler selbst Auslösen: \inPy{raise}}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Fehlerhafte Nutzung eigener Funktionen und Klassen könnte Schaden auslösen
+\item Beispiel: User gibt Dateinamen ein \Thus kann bestehende Dateien überschreiben
+\item Syntaktisch korrekt, aber ungewolltes Verhalten
+\item[\Thus] selbst Fehler auslösen
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Syntax: \texttt{raise}]
+\begin{minted}[fontsize=\scriptsize]{python}
+raise Fehlerklasse(Parameter)
+\end{minted}
+\end{codebox}
+%
+\begin{itemize}
+\item Fehlerklasse: Wie schon gezeigt: \inPy{ArithmeticError}, \inPy{ZeroDivisionError}, ...
+\item Parameter: Abhängig von Fehlerklasse
+	\begin{itemize}
+	\item Üblicherweise: String, der bei der Fehlerbehandlung ausgegeben werden kann.
+	\end{itemize}
+\end{itemize}
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{tcbraster}[raster columns=2,
+                  raster equal height,
+                  nobeforeafter,
+                  raster column skip=0.5cm]
+\begin{codebox}[Beispiel: Fehler auslösen]
+\begin{minted}[linenos, fontsize=\scriptsize]{python}
+print("Bitte Option wählen:")
+print("Spiel STARTEN")
+print("HIGHSCORE anzeigen")
+print("BEENDEN")
+
+option = input("> ")
+
+if not option.upper() in [
+    "STARTEN",
+    "HIGHSCORE",
+    "BEENDEN"
+] :
+    raise RuntimeError(
+        "Fehlerhafte Menüauswahl"
+    )
+\end{minted}
+\end{codebox}
+%
+\begin{cmdbox}[Ausgabe: Fehler auslösen]
+\begin{minted}[fontsize=\scriptsize]{text}
+Bitte Option wählen:
+Spiel STARTEN
+HIGHSCORE anzeigen
+BEENDEN
+> EINSTELLUNGEN
+Traceback (most recent call last):
+  File "<stdin>", line 2, in <module>
+RuntimeError: Fehlerhafte Menüauswahl
+\end{minted}
+\end{cmdbox}
+\end{tcbraster}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Re-\inPy{raise}}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Vielleicht gewollt: Debug-Ausgabe, aber dennoch Programmende
+\item Option, dass übergeordnete Funktionseinheit das Problem behebt
+\item[\Thus] Fehler nach \enquote{Behandlung} reaktivieren: \texttt{raise} \emph{ohne} Fehlerklasse
+\end{itemize}
+%
+\vspace{15pt}
+\begin{cmdbox}[Ausgabe: re-\texttt{raise}]
+\begin{minted}[fontsize=\scriptsize]{text}
+division by zero
+x = 1, y = 0
+Fehler doch abgefangen
+\end{minted}
+\end{cmdbox}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: re-\texttt{raise}]
+\begin{minted}[fontsize=\scriptsize]{python}
+def divide(x, y) :
+  try :
+    result = x / y
+  except ZeroDivisionError as e:
+    print(e)
+    print(f"x = {x}, y = {y}")
+    raise
+  else :
+    return result
+
+try :
+  print( divide(1, 0) )
+except ZeroDivisionError as e:
+  print("Fehler doch abgefangen")
+\end{minted}
+\end{codebox}
+%
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{}
+%
+\begin{hintbox}[Fehlerklasse möglichst spezifisch wählen]
+Damit Fehlerbehandlung sinnvoll geschrieben werden kann: Fehlerklasse so wählen, dass sie möglichst genau zu einem exakten Problem passt.
+
+Nicht zu unspezifisch Fehler auffangen, da sonst unerwartete Probleme maskiert werden können.
+\end{hintbox}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]{Eigene Fehlerklassen erstellen}
+%
+\begin{columns}[T]
+\column{.5\linewidth}
+\begin{itemize}
+\item Fehlerklassen sind tatsächlich normale \emph{Klassen}
+\item Hierarchische Zusammenhänge durch \emph{Vererbung}
+\item Alle notwendigen Eigenschaften durch Erben von \inPy{Exception} (oder davon abgeleiteten Klassen) gegeben
+\item Klasse kann ansonsten leer bleiben (\inPy{pass}), oder benutzerdefinierte Informationen zur Fehlerbehandlung enthalten.
+\end{itemize}
+%
+\column{.5\linewidth}
+\begin{codebox}[Beispiel: re-\texttt{raise}]
+\begin{minted}[fontsize=\scriptsize]{python}
+class EigeneFehlerKlasse (Exception) :
+   pass
+\end{minted}
+\end{codebox}
+%
+\begin{itemize}
+\item In \inPy{Exception}: String mit Kurzbeschreibung (\inPy{print(e)})
+\item Volles \enquote{Vokabular} an Klassen steht zur Verfügung: Attribute, Methoden, Dunders, ...
+\end{itemize}
+%
+\end{columns}
+%
+\end{frame}
+
+% =========================================================================== %
+
+\begin{frame}[fragile]
+%
+\begin{codebox}[Beispiel: Eigene Fehlerklasse anlegen]
+\begin{minted}[linenos,fontsize=\scriptsize]{python3}
+class UserInputError(Exception) :
+    pass
+
+try:
+    x = float(input("Bitte eine positive Zahl eingeben"))
+    if x < 0 :
+        raise UserInputError("Zahl war negativ!")
+except UserInputError as e :
+    print(e)
+    
+\end{minted}
+\end{codebox}
+%
+\end{frame}
