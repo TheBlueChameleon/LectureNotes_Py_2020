@@ -266,7 +266,7 @@ print(Instanz1 XX Instanz2)
 \begin{frame}
 %
 \begin{hintbox}[Tipp: Operatoren durch ihre Gegenstücke definieren]
-Es kann aufwändig, zumindest aber lästig werden, die sehr ähnlichen Operationen für eine Klasse zu definieren. Wir finden oft redundanten Code, der sich nur durch Kleinigkeiten unterscheidet. Bei Operatoren können wir das umgehen, indem wir nur einige wenige Operationen voll implementieren. Der Rest wird durch ihr gegenteil ausgedrückt: \inPy{A >= B} ist \inPy{not A < B} und \inPy{A - B} ist \inPy{-A + B} (\inPy{__neg__} und \inPy{__add__})
+Es kann aufwändig, zumindest aber lästig werden, die sehr ähnlichen Operationen für eine Klasse zu definieren. Wir finden oft redundanten Code, der sich nur durch Kleinigkeiten unterscheidet. Bei Operatoren können wir das umgehen, indem wir nur einige wenige Operationen voll implementieren. Der Rest wird durch ihr gegenteil ausgedrückt: \inPy{A >= B} ist \inPy{not A < B} und \inPy{A - B} ist \inPy{A + (-B)} (\inPy{__neg__} und \inPy{__add__})
 \end{hintbox}
 %
 \end{frame}
@@ -502,20 +502,19 @@ class Vector3D :
 class ColourArrow (Vector3D) :
     Arrowcount = 0    # neues Klassenattribut
     
-    def __init__(self, x, y, z, color) :
-        # überschreibt / ersetzt alte Methode für abgeleitete Klasse
-        self.x = x
+    def __init__(self, x, y, z, color) : # überschreibt / ersetzt alte Methode
+        self.x = x                       # für abgeleitete Klasse
         self.y = y
         self.z = z
         self.color = color
-        ColourArrow += 1
+        ColourArrow.Arrowcount += 1
     
     def __str__(self) :
         # ebenfalls: Überschreiben
         return "(" + str(self.x) + ", " + str(self.y) + ", " + str(self.z) + \
                ") in " + self.color
 
-#cA = ColourArrow(1, 4, 9, "red")     # Aufruf neue Methode
+cA = ColourArrow(1, 4, 9, "red")      # Aufruf neue Methode
 print( abs(cA) )                      # Aufruf alte Methode
 \end{minted}
 \end{codebox}
@@ -548,17 +547,17 @@ class ColourArrow (Vector3D) :
     Arrowcount = 0    # neues Klassenattribut
     
     def __init__(self, x, y, z, color) :
-        # überschreibt / ersetzt alte Methode für abgeleitete Klasse
         super().__init__(x, y, z)
         self.color = color
-        ColourArrow += 1
+        ColourArrow.Arrowcount += 1
     
     def __str__(self) :
-        # ebenfalls: Überschreiben
-        return str(super()) + " in " + self.color
+        return super().__str__() + " in " + self.color
 
-#cA = ColourArrow(1, 4, 9, "red")     # Aufruf neue Methode
-print( abs(cA) )                      # Aufruf alte Methode
+cA = ColourArrow(1, 4, 9, "red")
+print( abs(cA) )
+print("Es gibt", ColourArrow.Arrowcount, "ColourArrows.")
+print(cA)
 \end{minted}
 \end{codebox}
 %
@@ -575,6 +574,7 @@ print( abs(cA) )                      # Aufruf alte Methode
 \item Darf nicht zu Namenskollision führen
 	\begin{itemize}
 	\item[\Thus] Wenn \texttt{Basisklasse1} schon \texttt{Methode} implementiert, darf \texttt{Basisklasse2} das nicht auch tun.
+	\item[\Thus] Falls doch: nur \texttt{Methode} von erstgenannter \texttt{Basisklasse1} wird übernommen
 	\end{itemize}
 \end{itemize}
 %
@@ -631,18 +631,18 @@ print( abs(cA) )                      # Aufruf alte Methode
                   raster column skip=0.5cm]
 \begin{codebox}[Beispiel: Multi-Vererbung ...]
 \begin{minted}[fontsize=\scriptsize, linenos]{python3}
-class Animal:
-  def __init__(self, Animal):
-    print(Animal, 'is an animal.');
+class Animal :
+  def __init__(self, Animal) :
+    print(Animal, 'is an animal.')
     
-class Mammal(Animal):
-  def __init__(self, mammalName):
+class Mammal(Animal) :
+  def __init__(self, mammalName) :
     print(mammalName, 
           'is a warm-blooded animal.')
     super().__init__(mammalName)
 
-class NonWingedMammal(Mammal):
-  def __init__(self, NonWingedMammal):
+class NonWingedMammal(Mammal) :
+  def __init__(self, NonWingedMammal) :
     print(NonWingedMammal, "can't fly.")
     super().__init__(NonWingedMammal)
 \end{minted}
@@ -650,16 +650,16 @@ class NonWingedMammal(Mammal):
 %
 \begin{codebox}[... Fortsetzung]
 \begin{minted}[fontsize=\scriptsize, linenos, firstnumber=last]{python3}
-class NonMarineMammal(Mammal):
-  def __init__(self, NonMarineMammal):
+class NonMarineMammal(Mammal) :
+  def __init__(self, NonMarineMammal) :
     print(NonMarineMammal, 
           "can't swim.")
     super().__init__(NonMarineMammal)
     
 class Dog(NonMarineMammal,
-          NonWingedMammal):
-  def __init__(self):
-    print('Dog has 4 legs.');
+          NonWingedMammal) :
+  def __init__(self) :
+    print('Dog has 4 legs.')
     super().__init__('Dog')
 
 d = Dog()
